@@ -1,12 +1,26 @@
 import React from "react"
-import logo from "./logo.svg"
 import { ChakraProvider } from "@chakra-ui/react"
-import { Link, Route } from "wouter"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Home } from "./components/Home"
+import { AuthForm } from "./components/AuthForm"
 function App() {
   return (
     <ChakraProvider>
-      <Route path="/" component={Home} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="admin-login" element={<AuthForm form="admin-login" />} />
+          <Route
+            path="admin-register"
+            element={<AuthForm form="admin-register" />}
+          />
+          <Route path="user-login" element={<AuthForm form="user-login" />} />
+          <Route
+            path="user-register"
+            element={<AuthForm form="user-register" />}
+          />
+        </Routes>
+      </BrowserRouter>
     </ChakraProvider>
   )
 }
