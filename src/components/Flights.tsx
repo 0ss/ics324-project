@@ -37,15 +37,17 @@ export const Flights: React.FC<FlightProps> = ({}) => {
             </FormControl>
           </form>
         </Box>
-        <Flex flexWrap={"wrap"}>
-          {Array(10)
-            .fill(0)
-            .map((_, i) => (
-              <Box m={"10"}>
-                <FlightCard />
-              </Box>
-            ))}
-        </Flex>
+        <Center>
+          <SimpleGrid columns={{ sm: 1, lg: 3 }}>
+            {Array(10)
+              .fill(0)
+              .map((_, i) => (
+                <Box m={"10"}>
+                  <FlightCard />
+                </Box>
+              ))}
+          </SimpleGrid>
+        </Center>
       </Box>
     </Box>
   )
