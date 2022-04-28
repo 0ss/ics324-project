@@ -3,6 +3,7 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { Home } from "./components/Home"
 import { AuthForm } from "./components/AuthForm"
+import { Flights } from "./components/Flights"
 function App() {
   return (
     <ChakraProvider>
@@ -19,6 +20,7 @@ function App() {
             path="user-register"
             element={<AuthForm form="user-register" />}
           />
+          <Route path="flights" element={<Flights />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
