@@ -24,7 +24,7 @@ function App() {
           <Route path="/" element={!session ? <Home /> : <Flights />} />
           <Route
             path="admin-login"
-            element={!session ? <AuthForm form="admin-login" /> : <Home />}
+            element={!session ? <AuthForm form="admin-login" /> : <Flights />}
           />
           <Route
             path="user-login"
