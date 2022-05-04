@@ -20,7 +20,7 @@ export const Flights: React.FC<FlightProps> = ({}) => {
     e.preventDefault()
   }
   return (
-    <Box backgroundColor={"gray.100"} h="100vh" w={"100%"}>
+    <Box backgroundColor={"gray.100"} minHeight={"100vh"}>
       <Heading py={"10"} textAlign={"center"}>
         Search Flights 🕊
       </Heading>
