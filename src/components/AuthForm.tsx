@@ -23,17 +23,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({ form }) => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [loading, setIsLoading] = useState<boolean>();
   const toast = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("email: ", email, ", password: ", password);
+    console.log("email: ", email);
     //supabase auth
     try {
       setIsLoading(true);
-      const { error } = await supabase.auth.signIn({ email, password });
+      const { error } = await supabase.auth.signIn({ email });
       if (error) throw error;
       toast({
         title: "Sign In Successfull",
@@ -60,7 +59,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({ form }) => {
 
   return (
     <Center backgroundColor={"gray.100"} h="100vh">
-      <Box backgroundColor={"white"} borderRadius={"sm"} p={"12"}>
+      <Box
+        backgroundColor={"white"}
+        borderRadius={"sm"}
+        p={"12"}
+        boxShadow="base"
+      >
         <form onSubmit={handleSubmit}>
           <Center py={"10"}>
             <Heading fontSize={"2xl"}>{heading}</Heading>
@@ -75,17 +79,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({ form }) => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel htmlFor="password">Password </FormLabel>
-            <Input
-              borderColor={"black"}
-              id="password"
-              type={"password"}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </FormControl>
           <Center py="5">
-            <Button type={"submit"}>Submit</Button>
+            <Button type={"submit"} isLoading={loading}>
+              Continue
+            </Button>
           </Center>
           <Center py="5">
             <Button
