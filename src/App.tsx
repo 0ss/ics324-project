@@ -1,21 +1,21 @@
-import { ChakraProvider } from "@chakra-ui/react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home } from "./components/Home";
-import { AuthForm } from "./components/AuthForm";
-import { Flights } from "./components/Flights";
-import { useState, useEffect } from "react";
-import { supabase } from "./supabaseClient";
+import { ChakraProvider } from "@chakra-ui/react"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { Home } from "./components/Home"
+import { AuthForm } from "./components/AuthForm"
+import { Flights } from "./components/Flights"
+import { useState, useEffect } from "react"
+import { supabase } from "./supabaseClient"
 
 function App() {
-  const [session, setSession] = useState<any>();
+  const [session, setSession] = useState<any>()
 
   useEffect(() => {
-    setSession(supabase.auth.session());
+    setSession(supabase.auth.session())
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
+      setSession(session)
+    })
+  }, [])
 
   return (
     <ChakraProvider>
@@ -30,11 +30,11 @@ function App() {
             path="user-login"
             element={!session ? <AuthForm form="user-login" /> : <Flights />}
           />
-          <Route path="flights" element={session ? <Flights /> : <Flights />} />
+          <Route path="flights" element={session ? <Flights /> : <Home />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
-  );
+  )
 }
 
-export default App;
+export default App
