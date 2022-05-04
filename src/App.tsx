@@ -27,18 +27,10 @@ function App() {
             element={!session ? <AuthForm form="admin-login" /> : <Home />}
           />
           <Route
-            path="admin-register"
-            element={!session ? <AuthForm form="admin-register" /> : <Home />}
-          />
-          <Route
             path="user-login"
-            element={!session ? <AuthForm form="user-login" /> : <Home />}
+            element={!session ? <AuthForm form="user-login" /> : <Flights />}
           />
-          <Route
-            path="user-register"
-            element={!session ? <AuthForm form="user-register" /> : <Home />}
-          />
-          <Route path="flights" element={session ? <Flights /> : <Home />} />
+          <Route path="flights" element={session ? <Flights /> : <Flights />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

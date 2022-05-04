@@ -84,16 +84,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({ form }) => {
               Continue
             </Button>
           </Center>
-          <Center py="5">
-            <Button
-              onClick={() => {
-                navigate("/");
-              }}
-            >
-              Home
-            </Button>
-          </Center>
         </form>
+        <Center py="5">
+          <Button
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Home
+          </Button>
+        </Center>
       </Box>
     </Center>
   );

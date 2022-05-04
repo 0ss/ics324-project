@@ -9,14 +9,14 @@ import {
   Input,
   SimpleGrid,
   VStack,
-} from "@chakra-ui/react"
-import React, { useState } from "react"
-import { FlightCard } from "./FlightCard"
+} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { FlightCard } from "./FlightCard";
 
 interface FlightProps {}
 
 export const Flights: React.FC<FlightProps> = ({}) => {
-  const [search, setSearch] = useState<string>("")
+  const [search, setSearch] = useState<string>("");
   return (
     <Box backgroundColor={"gray.100"} h="100%" w={"100%"}>
       <Heading py={"10"} textAlign={"center"}>
@@ -50,5 +50,5 @@ export const Flights: React.FC<FlightProps> = ({}) => {
         </Center>
       </Box>
     </Box>
-  )
-}
+  );
+};
