@@ -22,7 +22,6 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   to_location,
   price,
 }) => {
-  const [search, setSearch] = useState<string>("")
   return (
     <Box
       p={"8"}
