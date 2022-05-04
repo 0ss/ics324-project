@@ -1,53 +1,43 @@
-import { Box, Center, Text, VStack } from "@chakra-ui/react"
-import React from "react"
-import { Link } from "wouter"
-import { useNavigate } from "react-router-dom"
+import { Box, Center, Text, VStack, Button } from "@chakra-ui/react";
+import React from "react";
+import { Link } from "wouter";
+import { useNavigate } from "react-router-dom";
 
 interface HomeProps {}
 
 export const Home: React.FC<HomeProps> = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
-    <Center h="100vh">
-      <VStack>
-        <Text
+    <Center h="100vh" backgroundColor={"gray.100"}>
+      <VStack spacing={10}>
+        <Button
           fontSize={"3xl"}
-          as={"a"}
+          fontWeight={"medium"}
           onClick={() => {
-            navigate("/admin-login")
+            navigate("/admin-login");
           }}
+          bgColor="white"
+          py={8}
+          px={6}
+          boxShadow="base"
         >
           Admin Login
-        </Text>
-        <Text
+        </Button>
+        <Button
           fontSize={"3xl"}
-          as={"a"}
+          fontWeight={"medium"}
           onClick={() => {
-            navigate("/admin-register")
+            navigate("/user-login");
           }}
-        >
-          Admin Register
-        </Text>
-        <Text
-          fontSize={"3xl"}
-          as={"a"}
-          onClick={() => {
-            navigate("/user-login")
-          }}
+          bgColor="white"
+          py={8}
+          px={9}
+          boxShadow="base"
         >
           User Login
-        </Text>
-        <Text
-          fontSize={"3xl"}
-          as={"a"}
-          onClick={() => {
-            navigate("/user-register")
-          }}
-        >
-          User Register
-        </Text>
+        </Button>
       </VStack>
     </Center>
-  )
-}
+  );
+};
