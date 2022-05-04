@@ -39,7 +39,6 @@ export const FlightCard: React.FC<FlightCardProps> = ({}) => {
           <HStack>
             <Text>📅 Date:</Text>
             <Spacer />
-
             <Text fontWeight={"bold"}>13 May 1:00PM</Text>
           </HStack>
         </VStack>
