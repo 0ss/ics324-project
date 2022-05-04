@@ -9,14 +9,15 @@ import {
   Input,
   SimpleGrid,
   VStack,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
-import { FlightCard } from "./FlightCard";
+} from "@chakra-ui/react"
+import React, { useState } from "react"
+import { randomFlights } from "./constants"
+import { FlightCard } from "./FlightCard"
 
 interface FlightProps {}
 
 export const Flights: React.FC<FlightProps> = ({}) => {
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>("")
   return (
     <Box backgroundColor={"gray.100"} h="100%" w={"100%"}>
       <Heading py={"10"} textAlign={"center"}>
@@ -39,16 +40,22 @@ export const Flights: React.FC<FlightProps> = ({}) => {
         </Box>
         <Center>
           <SimpleGrid columns={{ sm: 1, lg: 3 }}>
-            {Array(10)
-              .fill(0)
-              .map((_, i) => (
-                <Box m={"10"}>
-                  <FlightCard />
-                </Box>
-              ))}
+            {randomFlights.map((e) => (
+              <Box m={"10"}>
+                <FlightCard
+                  aircraft_id={e.aircraft_id}
+                  arrival_time={e.arrival_time}
+                  depr_time={e.depr_time}
+                  from_location={e.from_location}
+                  id={e.id}
+                  to_location={e.to_location}
+                  price={e.price}
+                />
+              </Box>
+            ))}
           </SimpleGrid>
         </Center>
       </Box>
     </Box>
-  );
-};
+  )
+}

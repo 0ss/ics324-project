@@ -9,10 +9,19 @@ import {
   Flex,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
+import { Flight } from "./constants"
 
-interface FlightCardProps {}
+interface FlightCardProps extends Flight {}
 
-export const FlightCard: React.FC<FlightCardProps> = ({}) => {
+export const FlightCard: React.FC<FlightCardProps> = ({
+  aircraft_id,
+  arrival_time,
+  depr_time,
+  from_location,
+  id,
+  to_location,
+  price,
+}) => {
   const [search, setSearch] = useState<string>("")
   return (
     <Box
@@ -24,22 +33,24 @@ export const FlightCard: React.FC<FlightCardProps> = ({}) => {
     >
       <VStack spacing={10}>
         <Box>
-          <Text fontSize={"3xl"}>Riyadh</Text>
+          <Text fontSize={"3xl"}>{from_location}</Text>
           <Text fontSize={"3xl"} textAlign="center" fontWeight={"bold"}>
             To
           </Text>
-          <Text fontSize={"3xl"}>Bahrain</Text>
+          <Text fontSize={"3xl"}>{to_location}</Text>
         </Box>
         <VStack>
           <HStack>
             <Text>💰 Price:</Text>
             <Spacer />
-            <Text fontWeight={"bold"}>1100$</Text>
+            <Text fontWeight={"bold"}>{price}</Text>
           </HStack>
           <HStack>
             <Text>📅 Date:</Text>
             <Spacer />
-            <Text fontWeight={"bold"}>13 May 1:00PM</Text>
+            <Text fontWeight={"bold"} fontSize={"sm"}>
+              {new Date(depr_time).toLocaleString()}
+            </Text>
           </HStack>
         </VStack>
         <Button>Buy</Button>
