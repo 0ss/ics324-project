@@ -6,22 +6,21 @@ import {
   Heading,
   Input,
   SimpleGrid,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
-import { randomFlights } from "./constants";
-import { FlightCard } from "./FlightCard";
-import { Navbar } from "./Navbar";
+} from "@chakra-ui/react"
+import React, { useState } from "react"
+import { randomFlights } from "./constants"
+import { FlightCard } from "./FlightCard"
+import { Navbar } from "./Navbar"
 interface FlightProps {}
 
 export const Flights: React.FC<FlightProps> = ({}) => {
-  const [search, setSearch] = useState<string>("");
-  console.log(search);
+  const [search, setSearch] = useState<string>("")
+  console.log(search)
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+    e.preventDefault()
+  }
   return (
     <Box backgroundColor={"gray.100"} minHeight={"100vh"}>
-      <Navbar />
       <Heading py={"10"} textAlign={"center"}>
         Search Flights 🕊
       </Heading>
@@ -62,9 +61,9 @@ export const Flights: React.FC<FlightProps> = ({}) => {
                         price={e.price}
                       />{" "}
                     </Box>
-                  );
+                  )
                 }
-                return null;
+                return null
               }
               return (
                 <Box m={"10"}>
@@ -78,11 +77,11 @@ export const Flights: React.FC<FlightProps> = ({}) => {
                     price={e.price}
                   />{" "}
                 </Box>
-              );
+              )
             })}
           </SimpleGrid>
         </Center>
       </Box>
     </Box>
-  );
-};
+  )
+}
