@@ -16,7 +16,6 @@ interface FlightProps {}
 export const Flights: React.FC<FlightProps> = ({}) => {
   const [search, setSearch] = useState<string>("")
   const [flights, setFlights] = useState<any>()
-  console.log(search)
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
@@ -24,7 +23,6 @@ export const Flights: React.FC<FlightProps> = ({}) => {
     try{
       let {error, data} = await supabase.from('flights').select().order('id')
       setFlights(data)
-      console.log(flights)
     }catch(err){
       console.log(err)
     }
@@ -87,8 +85,8 @@ export const Flights: React.FC<FlightProps> = ({}) => {
                 <Box m={"10"}>
                   <FlightCard
                     aircraft_id={e.aircraft_id}
-                    arrival_time={e.arrival_time}
-                    depr_time={e.depr_time}
+                    arrival_time={e.arrival}
+                    depr_time={e.departure}
                     from_location={e.from_location}
                     id={e.id}
                     to_location={e.to_location}

@@ -43,7 +43,8 @@ export const FlightCard: React.FC<FlightCardProps> = ({
 
   return (
     <Box
-      p={"8"}
+      py={8}
+      px={4}
       w={"72"}
       backgroundColor={"whatsapp.100"}
       shadow={"lg"}
@@ -64,10 +65,17 @@ export const FlightCard: React.FC<FlightCardProps> = ({
             <Text fontWeight={"bold"}>{price}</Text>
           </HStack>
           <HStack>
-            <Text>📅 Date:</Text>
+            <Text>📅 Departue:</Text>
             <Spacer />
             <Text fontWeight={"bold"} fontSize={"sm"}>
               {new Date(depr_time).toLocaleString()}
+            </Text>
+          </HStack>
+          <HStack>
+            <Text>📅 Arrival:</Text>
+            <Spacer />
+            <Text fontWeight={"bold"} fontSize={"sm"}>
+              {new Date(arrival_time).toLocaleString()}
             </Text>
           </HStack>
         </VStack>
