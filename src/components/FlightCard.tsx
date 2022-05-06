@@ -20,9 +20,12 @@ import {
   FormLabel,
   Input,
   FormControl,
+  useToast
 } from "@chakra-ui/react"
 import React, { useState } from "react"
+import { supabase } from "../supabaseClient"
 import { Flight } from "./constants"
+
 
 interface FlightCardProps extends Flight {}
 
@@ -40,6 +43,35 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   const [ccNumber, setCCNumber] = useState<string>()
   const [ccDate, setCCDate] = useState<string>()
   const [ccSecret, setCCSecret] = useState<string>()
+  const [isLoading, setIsLoading] = useState<boolean>()
+  const toast = useToast();
+
+
+  const addTicket = async () =>{
+    try{
+      setIsLoading(true)
+      //@ts-ignore
+      const {data} = await supabase.from('ticket').insert({flight_id:id, seat_number:seat, user_id: supabase.auth.user().id})
+      toast({
+        title: "Ticket purchased!",
+        position: "top",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    }catch(err){
+      toast({
+        title: "Error has occurred, please try again.",
+        position: "top",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log(err)
+    }finally{
+      setIsLoading(false)
+    }
+  }
 
   return (
     <Box
@@ -156,7 +188,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
               <Button colorScheme="blue" mr={3} onClick={onClose}>
                 Close
               </Button>
-              <Button variant="ghost">Buy Ticket</Button>
+              <Button variant="ghost" onClick={() => addTicket()}  isLoading={isLoading}>Buy Ticket</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
