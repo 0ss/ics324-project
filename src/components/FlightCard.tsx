@@ -72,6 +72,14 @@ export const FlightCard: React.FC<FlightCardProps> = ({
           </HStack>
         </VStack>
         <Button onClick={onOpen}>Buy</Button>
+        <Button
+          onClick={() => {
+            // delete ticket with id {id}
+          }}
+        >
+          Delete Ticket
+        </Button>
+
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
