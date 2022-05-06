@@ -7,18 +7,35 @@ import {
   Input,
   SimpleGrid,
 } from "@chakra-ui/react"
-import React, { useState } from "react"
-import { randomFlights } from "./constants"
+import React, { useState, useEffect } from "react"
 import { FlightCard } from "./FlightCard"
-import { Navbar } from "./Navbar"
+import {supabase} from '../supabaseClient'
+
 interface FlightProps {}
 
 export const Flights: React.FC<FlightProps> = ({}) => {
   const [search, setSearch] = useState<string>("")
+  const [flights, setFlights] = useState<any>()
   console.log(search)
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
+  const fetchFlights = async () =>{
+    try{
+      let {error, data} = await supabase.from('flights').select().order('id')
+      setFlights(data)
+      console.log(flights)
+    }catch(err){
+      console.log(err)
+    }
+    
+  }
+
+  useEffect(()=>{
+    fetchFlights()
+  },[])
+
+
   return (
     <Box backgroundColor={"gray.100"} minHeight={"100vh"}>
       <Heading py={"10"} textAlign={"center"}>
@@ -40,8 +57,9 @@ export const Flights: React.FC<FlightProps> = ({}) => {
           </form>
         </Box>
         <Center>
-          <SimpleGrid columns={{ sm: 1, lg: 3 }}>
-            {randomFlights.map((e) => {
+         {flights && (
+            <SimpleGrid columns={{ sm: 1, lg: 3 }}>
+            {flights.map((e:any) => {
               if (search?.length > 0) {
                 if (
                   (e.from_location as string)
@@ -53,8 +71,8 @@ export const Flights: React.FC<FlightProps> = ({}) => {
                     <Box m={"10"} key={e.id}>
                       <FlightCard
                         aircraft_id={e.aircraft_id}
-                        arrival_time={e.arrival_time}
-                        depr_time={e.depr_time}
+                        arrival_time={e.arrival}
+                        depr_time={e.departure}
                         from_location={e.from_location}
                         id={e.id}
                         to_location={e.to_location}
@@ -80,6 +98,7 @@ export const Flights: React.FC<FlightProps> = ({}) => {
               )
             })}
           </SimpleGrid>
+         )}
         </Center>
       </Box>
     </Box>
