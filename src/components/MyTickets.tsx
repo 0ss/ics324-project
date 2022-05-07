@@ -38,9 +38,10 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
   }, [])
   return (
     <>
-      <Center>
+        <Center pt={10}>
         <Heading>My Tickets</Heading>
       </Center>
+    <Center pt={10}>
       {tickets && (
         <SimpleGrid columns={{ sm: 1, lg: 3 }}>
           {tickets.map( (e: any) => {
@@ -60,7 +61,9 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
             )
           })}
         </SimpleGrid>
+        
       )}
+      </Center>
     </>
   )
 }
