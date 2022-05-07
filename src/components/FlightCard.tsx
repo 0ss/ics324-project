@@ -84,7 +84,6 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         .delete()
         .match({ id })
 
-      console.log("data", data)
       toast({
         title: "Ticket deleted!",
         position: "top",

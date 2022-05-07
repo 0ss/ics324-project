@@ -15,6 +15,8 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
+  toast,
+  useToast,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -24,10 +26,37 @@ export const Navbar: React.FC = () => {
   const [seat, setSeat] = useState<string>("")
   const [locationFrom, setLocationFrom] = useState<string>()
   const [locationTo, setLocationTo] = useState<string>()
-  const [date, setDate] = useState<string>()
+  const [dep, setDep] = useState<string>()
+  const [arrival, setArrival] = useState<string>()
   const [price, setPrice] = useState<string>()
   const navigate = useNavigate()
-  console.log(supabase.auth.user())
+  const toast = useToast()
+  const addTicket = async () => {
+    try {
+      //@ts-ignore
+      const { data } = await supabase.from("ticket").insert({
+        flight_id: 1,
+        seat_number: seat,
+      })
+      toast({
+        title: "Ticket added!",
+        position: "top",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (err) {
+      toast({
+        title: "Error has occurred, please try again.",
+        position: "top",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
+      console.log(err)
+    } finally {
+    }
+  }
   return (
     <HStack w="full" justifyContent="space-between" p={8}>
       <Text>{supabase.auth.user()?.email}</Text>
@@ -49,7 +78,7 @@ export const Navbar: React.FC = () => {
                   {Array(26)
                     .fill(null)
                     .map((e, i) => (
-                      <option key={e} value={e}>
+                      <option key={Math.random()} value={e}>
                         {`${String.fromCharCode(97 + i)} ${(
                           Math.random() * 10 +
                           1
@@ -75,11 +104,17 @@ export const Navbar: React.FC = () => {
                   type="text"
                   onChange={(e) => setLocationTo(e.target.value)}
                 />
-                <Heading fontSize={"2xl"}> Enter date 💰 :</Heading>
+                <Heading fontSize={"2xl"}> Enter departure date :</Heading>
                 <Input
-                  id="date"
-                  type="text"
-                  onChange={(e) => setDate(e.target.value)}
+                  id="dep"
+                  type="date"
+                  onChange={(e) => setDep(e.target.value)}
+                />
+                <Heading fontSize={"2xl"}> Enter arrival date 💰 :</Heading>
+                <Input
+                  id="arrival"
+                  type="date"
+                  onChange={(e) => setArrival(e.target.value)}
                 />
               </form>
             </Center>
@@ -89,7 +124,9 @@ export const Navbar: React.FC = () => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Add Ticket</Button>
+            <Button variant="ghost" onClick={addTicket}>
+              Add Ticket
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
