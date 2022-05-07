@@ -26,7 +26,9 @@ import React, { useState } from "react"
 import { supabase } from "../supabaseClient"
 import { Flight } from "./constants"
 
-interface FlightCardProps extends Flight {}
+interface FlightCardProps extends Flight {
+
+}
 
 export const FlightCard: React.FC<FlightCardProps> = ({
   aircraft_id,
@@ -36,9 +38,9 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   id,
   to_location,
   price,
+  seat
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [seat, setSeat] = useState<string>("")
   const [ccNumber, setCCNumber] = useState<string>()
   const [ccDate, setCCDate] = useState<string>()
   const [ccSecret, setCCSecret] = useState<string>()
@@ -163,7 +165,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
             <ModalBody>
               <Center>
                 <form>
-                  <Heading fontSize={"2xl"}>Seat 🪑:</Heading>
+                  <Heading fontSize={"2xl"}>Seat 🪑: {seat}</Heading>
                   <Text fontSize={"x-small"}></Text>
                   <Heading fontSize={"2xl"}>
                     {" "}

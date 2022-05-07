@@ -79,7 +79,8 @@ export const Flights: React.FC<FlightProps> = ({}) => {
                           id={e.id}
                           to_location={e.to_location}
                           price={e.price}
-                        />{" "}
+                          seat={e.seat}
+                        />
                       </Box>
                     )
                   }
@@ -95,7 +96,8 @@ export const Flights: React.FC<FlightProps> = ({}) => {
                       id={e.id}
                       to_location={e.to_location}
                       price={e.price}
-                    />{" "}
+                      seat={e.seat}
+                    />
                   </Box>
                 )
               })}

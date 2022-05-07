@@ -48,6 +48,7 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
                   id={e.id}
                   to_location={e.to_location}
                   price={e.price}
+                  seat={e.seat}
                 />{" "}
               </Box>
             )
