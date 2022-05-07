@@ -51,11 +51,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
     try {
       setIsLoading(true)
       //@ts-ignore
-      const { data } = await supabase.from("ticket").insert({
-        flight_id: id,
-        seat_number: seat,
-        user_id: supabase.auth.user()?.id,
-      })
+      await supabase.from("ticket").update({user_id: supabase.auth.user().id}).eq('flight_id', id).eq('seat_number', seat)
       toast({
         title: "Ticket purchased!",
         position: "top",
