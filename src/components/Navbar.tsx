@@ -17,6 +17,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { supabase } from "../supabaseClient"
 export const Navbar: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -25,10 +26,13 @@ export const Navbar: React.FC = () => {
   const [locationTo, setLocationTo] = useState<string>()
   const [date, setDate] = useState<string>()
   const [price, setPrice] = useState<string>()
-
+  const navigate = useNavigate()
+  console.log(supabase.auth.user())
   return (
     <HStack w="full" justifyContent="space-between" p={8}>
       <Text>{supabase.auth.user()?.email}</Text>
+      <Button onClick={() => navigate("my-tickets")}>My tickets</Button>
+      <Button onClick={() => navigate("")}>Buy tickets</Button>
       <Button onClick={onOpen}>Add tickets</Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -85,7 +89,7 @@ export const Navbar: React.FC = () => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Buy Ticket</Button>
+            <Button variant="ghost">Add Ticket</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
