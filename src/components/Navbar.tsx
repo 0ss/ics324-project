@@ -32,6 +32,7 @@ export const Navbar: React.FC = () => {
     <HStack w="full" justifyContent="space-between" p={8}>
       <Text>{supabase.auth.user()?.email}</Text>
       <Button onClick={() => navigate("my-tickets")}>My tickets</Button>
+      <Button onClick={() => navigate("")}>Buy tickets</Button>
       <Button onClick={onOpen}>Add tickets</Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

@@ -1,4 +1,4 @@
-import { Box, Heading, SimpleGrid, useToast } from "@chakra-ui/react"
+import { Box, Center, Heading, SimpleGrid, useToast } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { supabase } from "../supabaseClient"
 import { FlightCard } from "./FlightCard"
@@ -10,7 +10,10 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
 
   const fetchTickets = async () => {
     try {
-      let { error, data } = await supabase.from("ticket").select()
+      let { error, data } = await supabase
+        .from("ticket")
+        .select()
+        .eq("user_id", supabase.auth.user()?.id)
       setTickets(data)
     } catch (err) {
       toast({
@@ -29,7 +32,9 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
   }, [])
   return (
     <>
-      <Heading>My Tickets</Heading>
+      <Center>
+        <Heading>My Tickets</Heading>
+      </Center>
       {tickets && (
         <SimpleGrid columns={{ sm: 1, lg: 3 }}>
           {tickets.map((e: any) => {
