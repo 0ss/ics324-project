@@ -76,7 +76,8 @@ export const FlightCard: React.FC<FlightCardProps> = ({
     try {
       console.log(id, seat)
       setIsLoading(true)
-      const {error} = await supabase.from("ticket").update({user_id: null}).eq('flight_id', id).eq('seat_number', seat)
+      const {error} = await supabase.from("ticket").delete().eq('flight_id', id)
+      await supabase.from("flights").delete().eq('id', id)
       if(error) throw error
       toast({
         title: "Ticket deleted!",

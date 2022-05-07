@@ -2,6 +2,7 @@ import { Box, Center, Heading, SimpleGrid, useToast } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { supabase } from "../supabaseClient"
 import { FlightCard } from "./FlightCard"
+import { MyTicketsCard } from "./MyTicketsCard"
 
 interface MyTicketsProps {}
 export const MyTickets: React.FC<MyTicketsProps> = () => {
@@ -48,7 +49,7 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
           {tickets.map( (e: any) => {
             return (
               <Box m={"10"} key={e.flights.id}>
-                <FlightCard
+                <MyTicketsCard
                   aircraft_id={e.flights.aircraft_id}
                   arrival_time={e.flights.arrival}
                   depr_time={e.flights.departure}
