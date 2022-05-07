@@ -26,7 +26,6 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
   `)
   //@ts-ignore
   .eq('user_id', supabase.auth.user().id)
-      console.log(data)
       setTickets(data)
     } catch (err) {
       console.log(err)
@@ -36,6 +35,8 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
   useEffect(() => {
     fetchTickets()
   }, [])
+
+
   return (
     <>
         <Center pt={10}>
@@ -52,7 +53,7 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
                   arrival_time={e.flights.arrival}
                   depr_time={e.flights.departure}
                   from_location={e.flights.from_location}
-                  id={e.flights.id}
+                  id={e.flight_id}
                   to_location={e.flights.to_location}
                   price={e.flights.price}
                   seat={e.flights.seat}

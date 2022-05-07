@@ -72,16 +72,12 @@ export const FlightCard: React.FC<FlightCardProps> = ({
       setIsLoading(false)
     }
   }
-
   const deleteTicket = async (id: number) => {
     try {
+      console.log(id, seat)
       setIsLoading(true)
-      //@ts-ignore
-      const { data } = await supabase
-        .from("ticket")
-        .delete()
-        .match({ id })
-
+      const {error} = await supabase.from("ticket").update({user_id: null}).eq('flight_id', id).eq('seat_number', seat)
+      if(error) throw error
       toast({
         title: "Ticket deleted!",
         position: "top",
@@ -143,8 +139,8 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         </VStack>
         <Button onClick={onOpen}>Buy</Button>
         <Button
+        isLoading={isLoading}
           onClick={() => {
-            // delete ticket with id {id}
             deleteTicket(id)
           }}
         >
