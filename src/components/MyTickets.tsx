@@ -10,19 +10,25 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
 
   const fetchTickets = async () => {
     try {
-      let { error, data } = await supabase
+      let { data } = await supabase
         .from("ticket")
-        .select()
-        .eq("user_id", supabase.auth.user()?.id)
+        .select(`
+      flight_id,
+      flights(
+        id,
+        arrival,
+        departure,
+        price,
+        from_location,
+        to_location,
+        seat
+      )
+  `)
+  //@ts-ignore
+  .eq('user_id', supabase.auth.user().id)
+      console.log(data)
       setTickets(data)
     } catch (err) {
-      toast({
-        title: "Error has occurred, please try again.",
-        position: "top",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      })
       console.log(err)
     }
   }
@@ -37,18 +43,18 @@ export const MyTickets: React.FC<MyTicketsProps> = () => {
       </Center>
       {tickets && (
         <SimpleGrid columns={{ sm: 1, lg: 3 }}>
-          {tickets.map((e: any) => {
+          {tickets.map( (e: any) => {
             return (
-              <Box m={"10"} key={e.id}>
+              <Box m={"10"} key={e.flights.id}>
                 <FlightCard
-                  aircraft_id={e.aircraft_id}
-                  arrival_time={e.arrival}
-                  depr_time={e.departure}
-                  from_location={e.from_location}
-                  id={e.id}
-                  to_location={e.to_location}
-                  price={e.price}
-                  seat={e.seat}
+                  aircraft_id={e.flights.aircraft_id}
+                  arrival_time={e.flights.arrival}
+                  depr_time={e.flights.departure}
+                  from_location={e.flights.from_location}
+                  id={e.flights.id}
+                  to_location={e.flights.to_location}
+                  price={e.flights.price}
+                  seat={e.flights.seat}
                 />{" "}
               </Box>
             )
