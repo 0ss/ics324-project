@@ -27,7 +27,7 @@ export const Navbar: React.FC = () => {
   const [date, setDate] = useState<string>()
   const [price, setPrice] = useState<string>()
   const navigate = useNavigate()
-
+  console.log(supabase.auth.user())
   return (
     <HStack w="full" justifyContent="space-between" p={8}>
       <Text>{supabase.auth.user()?.email}</Text>
