@@ -32,12 +32,26 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate()
   const toast = useToast()
   const addTicket = async () => {
+    let id = Math.floor(Math.random() * 100010);
     try {
-      //@ts-ignore
-      const { data } = await supabase.from("ticket").insert({
-        flight_id: 1,
-        seat_number: seat,
+
+      await supabase.from("flights").insert({
+        id,
+        from_location : locationFrom,
+        to_location: locationTo,
+        departure: dep,
+        arrival,
+        price,
+        seat
       })
+      .single()
+
+      await supabase.from("ticket").insert({
+        flight_id : id,
+        seat_number: seat
+      })
+      .single()
+
       toast({
         title: "Ticket added!",
         position: "top",
@@ -107,13 +121,13 @@ export const Navbar: React.FC = () => {
                 <Heading fontSize={"2xl"}> Enter departure date :</Heading>
                 <Input
                   id="dep"
-                  type="date"
+                  type="datetime-local"
                   onChange={(e) => setDep(e.target.value)}
                 />
-                <Heading fontSize={"2xl"}> Enter arrival date 💰 :</Heading>
+                <Heading fontSize={"2xl"}> Enter arrival date :</Heading>
                 <Input
                   id="arrival"
-                  type="date"
+                  type="datetime-local"
                   onChange={(e) => setArrival(e.target.value)}
                 />
               </form>
