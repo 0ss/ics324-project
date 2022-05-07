@@ -26,9 +26,7 @@ import React, { useState } from "react"
 import { supabase } from "../supabaseClient"
 import { Flight } from "./constants"
 
-interface FlightCardProps extends Flight {
-
-}
+interface FlightCardProps extends Flight {}
 
 export const FlightCard: React.FC<FlightCardProps> = ({
   aircraft_id,
@@ -38,7 +36,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   id,
   to_location,
   price,
-  seat
+  seat,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [ccNumber, setCCNumber] = useState<string>()
@@ -51,7 +49,11 @@ export const FlightCard: React.FC<FlightCardProps> = ({
     try {
       setIsLoading(true)
       //@ts-ignore
-      await supabase.from("ticket").update({user_id: supabase.auth.user().id}).eq('flight_id', id).eq('seat_number', seat)
+      await supabase
+        .from("ticket")
+        .update({ user_id: supabase.auth.user()?.id })
+        .eq("flight_id", id)
+        .eq("seat_number", seat)
       toast({
         title: "Ticket purchased!",
         position: "top",
@@ -76,9 +78,15 @@ export const FlightCard: React.FC<FlightCardProps> = ({
     try {
       console.log(id, seat)
       setIsLoading(true)
-      const {error} = await supabase.from("ticket").delete().eq('flight_id', id)
-      await supabase.from("flights").delete().eq('id', id)
-      if(error) throw error
+      const { error } = await supabase
+        .from("ticket")
+        .delete()
+        .eq("flight_id", id)
+      await supabase
+        .from("flights")
+        .delete()
+        .eq("id", id)
+      if (error) throw error
       toast({
         title: "Ticket deleted!",
         position: "top",
@@ -140,7 +148,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         </VStack>
         <Button onClick={onOpen}>Buy</Button>
         <Button
-        isLoading={isLoading}
+          isLoading={isLoading}
           onClick={() => {
             deleteTicket(id)
           }}
@@ -175,6 +183,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
                     <Input
                       id="number"
                       type="text"
+                      required
                       onChange={(e) => setCCNumber(e.target.value)}
                     />
                   </FormControl>
@@ -183,6 +192,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
                     <Input
                       id="date"
                       type="text"
+                      required
                       onChange={(e) => setCCDate(e.target.value)}
                     />
                   </FormControl>
@@ -191,6 +201,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
                     <Input
                       id="cvv"
                       type="password"
+                      required
                       onChange={(e) => setCCSecret(e.target.value)}
                     />
                   </FormControl>{" "}

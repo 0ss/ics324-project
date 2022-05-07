@@ -31,26 +31,46 @@ export const Navbar: React.FC = () => {
   const [price, setPrice] = useState<string>()
   const navigate = useNavigate()
   const toast = useToast()
+  const checkIfEmpty = (obj: Record<string, string | undefined>) => {
+    console.log(obj)
+    for (const i in obj) {
+      if (!obj[i]) {
+        toast({
+          title: `${i} should not be empty`,
+          position: "top",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        })
+        return true
+      }
+    }
+  }
   const addTicket = async () => {
-    let id = Math.floor(Math.random() * 100010);
+    let id = Math.floor(Math.random() * 100010)
+    if (checkIfEmpty({ seat, locationFrom, locationTo, dep, arrival, price }))
+      return
     try {
+      await supabase
+        .from("flights")
+        .insert({
+          id,
+          from_location: locationFrom,
+          to_location: locationTo,
+          departure: dep,
+          arrival,
+          price,
+          seat,
+        })
+        .single()
 
-      await supabase.from("flights").insert({
-        id,
-        from_location : locationFrom,
-        to_location: locationTo,
-        departure: dep,
-        arrival,
-        price,
-        seat
-      })
-      .single()
-
-      await supabase.from("ticket").insert({
-        flight_id : id,
-        seat_number: seat
-      })
-      .single()
+      await supabase
+        .from("ticket")
+        .insert({
+          flight_id: id,
+          seat_number: seat,
+        })
+        .single()
 
       toast({
         title: "Ticket added!",
@@ -71,6 +91,7 @@ export const Navbar: React.FC = () => {
     } finally {
     }
   }
+
   return (
     <HStack w="full" justifyContent="space-between" p={8}>
       <Text>{supabase.auth.user()?.email}</Text>
@@ -88,24 +109,23 @@ export const Navbar: React.FC = () => {
                 <Text fontSize={"x-small"}>
                   Seat should be a letter and a number.
                 </Text>
-                <select onChange={(e) => setSeat(e.target.value)}>
-                  {Array(26)
-                    .fill(null)
-                    .map((e, i) => (
-                      <option key={Math.random()} value={e}>
-                        {`${String.fromCharCode(97 + i)} ${(
-                          Math.random() * 10 +
-                          1
-                        ).toFixed()}`}
-                      </option>
-                    ))}
-                </select>
-                <Heading fontSize={"2xl"}> Enter Ticket price 💰 :</Heading>
                 <Input
-                  id="price"
+                  id="seat"
                   type="text"
-                  onChange={(e) => setPrice(e.target.value)}
+                  value={seat}
+                  onChange={(e) => setSeat(e.target.value)}
                 />
+                <Heading fontSize={"2xl"}> Enter Ticket price 💰 :</Heading>
+                <FormControl isRequired>
+                  <Input
+                    id="price"
+                    type="text"
+                    value={price}
+                    isRequired
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                </FormControl>
+
                 <Heading fontSize={"2xl"}> Enter location from :</Heading>
                 <Input
                   id="from"

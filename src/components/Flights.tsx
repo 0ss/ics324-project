@@ -34,7 +34,7 @@ export const Flights: React.FC<FlightProps> = ({}) => {
 
   useEffect(() => {
     fetchFlights()
-  }, [])
+  }, [flights])
 
   return (
     <Box backgroundColor={"gray.100"} minHeight={"100vh"}>
