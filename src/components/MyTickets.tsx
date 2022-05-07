@@ -1,4 +1,10 @@
+import { Heading } from "@chakra-ui/react"
+
 interface MyTicketsProps {}
 export const MyTickets: React.FC<MyTicketsProps> = () => {
-  return <></>
+  return (
+    <>
+      <Heading>My Tickets</Heading>
+    </>
+  )
 }
