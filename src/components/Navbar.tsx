@@ -85,7 +85,7 @@ export const Navbar: React.FC = () => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Buy Ticket</Button>
+            <Button variant="ghost">Add Ticket</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
