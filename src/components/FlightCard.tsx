@@ -121,6 +121,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
           </Text>
           <Text fontSize={"3xl"}>{to_location}</Text>
         </Box>
+        <Box>Seat: {seat}</Box>
         <VStack>
           <HStack>
             <Text>💰 Price:</Text>
@@ -162,22 +163,8 @@ export const FlightCard: React.FC<FlightCardProps> = ({
             <ModalBody>
               <Center>
                 <form>
-                  <Heading fontSize={"2xl"}>Enter Seat 🪑:</Heading>
-                  <Text fontSize={"x-small"}>
-                    Seat should be a letter and a number.
-                  </Text>
-                  <select onChange={(e) => setSeat(e.target.value)}>
-                    {Array(26)
-                      .fill(null)
-                      .map((e, i) => (
-                        <option key={e} value={e}>
-                          {`${String.fromCharCode(97 + i)} ${(
-                            Math.random() * 10 +
-                            1
-                          ).toFixed()}`}
-                        </option>
-                      ))}
-                  </select>
+                  <Heading fontSize={"2xl"}>Seat 🪑:</Heading>
+                  <Text fontSize={"x-small"}></Text>
                   <Heading fontSize={"2xl"}>
                     {" "}
                     Enter Credit Cards Details 💳:
