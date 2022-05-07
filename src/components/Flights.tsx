@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import React, { useState, useEffect } from "react"
 import { FlightCard } from "./FlightCard"
-import {supabase} from '../supabaseClient'
+import { supabase } from "../supabaseClient"
 
 interface FlightProps {}
 
@@ -19,20 +19,22 @@ export const Flights: React.FC<FlightProps> = ({}) => {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
-  const fetchFlights = async () =>{
-    try{
-      let {error, data} = await supabase.from('flights').select().order('id')
+  const fetchFlights = async () => {
+    try {
+      let { error, data } = await supabase
+        .from("flights")
+        .select()
+        .order("id")
+      console.log(data)
       setFlights(data)
-    }catch(err){
+    } catch (err) {
       console.log(err)
     }
-    
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchFlights()
-  },[])
-
+  }, [])
 
   return (
     <Box backgroundColor={"gray.100"} minHeight={"100vh"}>
@@ -55,48 +57,50 @@ export const Flights: React.FC<FlightProps> = ({}) => {
           </form>
         </Box>
         <Center>
-         {flights && (
+          {flights && (
             <SimpleGrid columns={{ sm: 1, lg: 3 }}>
-            {flights.map((e:any) => {
-              if (search?.length > 0) {
-                if (
-                  (e.from_location as string)
-                    .toLocaleLowerCase()
-                    .includes(search) ||
-                  (e.to_location as string).toLocaleLowerCase().includes(search)
-                ) {
-                  return (
-                    <Box m={"10"} key={e.id}>
-                      <FlightCard
-                        aircraft_id={e.aircraft_id}
-                        arrival_time={e.arrival}
-                        depr_time={e.departure}
-                        from_location={e.from_location}
-                        id={e.id}
-                        to_location={e.to_location}
-                        price={e.price}
-                      />{" "}
-                    </Box>
-                  )
+              {flights.map((e: any) => {
+                if (search?.length > 0) {
+                  if (
+                    (e.from_location as string)
+                      .toLocaleLowerCase()
+                      .includes(search) ||
+                    (e.to_location as string)
+                      .toLocaleLowerCase()
+                      .includes(search)
+                  ) {
+                    return (
+                      <Box m={"10"} key={e.id}>
+                        <FlightCard
+                          aircraft_id={e.aircraft_id}
+                          arrival_time={e.arrival}
+                          depr_time={e.departure}
+                          from_location={e.from_location}
+                          id={e.id}
+                          to_location={e.to_location}
+                          price={e.price}
+                        />{" "}
+                      </Box>
+                    )
+                  }
+                  return null
                 }
-                return null
-              }
-              return (
-                <Box m={"10"}>
-                  <FlightCard
-                    aircraft_id={e.aircraft_id}
-                    arrival_time={e.arrival}
-                    depr_time={e.departure}
-                    from_location={e.from_location}
-                    id={e.id}
-                    to_location={e.to_location}
-                    price={e.price}
-                  />{" "}
-                </Box>
-              )
-            })}
-          </SimpleGrid>
-         )}
+                return (
+                  <Box m={"10"}>
+                    <FlightCard
+                      aircraft_id={e.aircraft_id}
+                      arrival_time={e.arrival}
+                      depr_time={e.departure}
+                      from_location={e.from_location}
+                      id={e.id}
+                      to_location={e.to_location}
+                      price={e.price}
+                    />{" "}
+                  </Box>
+                )
+              })}
+            </SimpleGrid>
+          )}
         </Center>
       </Box>
     </Box>

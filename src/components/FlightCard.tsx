@@ -75,6 +75,36 @@ export const FlightCard: React.FC<FlightCardProps> = ({
     }
   }
 
+  const deleteTicket = async (id: number) => {
+    try {
+      setIsLoading(true)
+      //@ts-ignore
+      const { data } = await supabase
+        .from("ticket")
+        .delete()
+        .match({ id })
+
+      console.log("data", data)
+      toast({
+        title: "Ticket deleted!",
+        position: "top",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (err) {
+      toast({
+        title: "Error has occurred, please try again.",
+        position: "top",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
   return (
     <Box
       py={8}
@@ -117,6 +147,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         <Button
           onClick={() => {
             // delete ticket with id {id}
+            deleteTicket(id)
           }}
         >
           Delete Ticket
