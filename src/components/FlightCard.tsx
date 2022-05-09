@@ -1,12 +1,12 @@
 import {
   Box,
   Button,
+  Center,
+  FormControl,
+  FormLabel,
   Heading,
-  VStack,
-  Text,
   HStack,
-  Spacer,
-  Flex,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,15 +14,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spacer,
+  Text,
   useDisclosure,
-  Center,
-  FormHelperText,
-  FormLabel,
-  Input,
-  FormControl,
   useToast,
+  VStack,
 } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { supabase } from "../supabaseClient"
 import { Flight } from "./constants"
 
@@ -43,6 +41,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   const [ccDate, setCCDate] = useState<string>()
   const [ccSecret, setCCSecret] = useState<string>()
   const [isLoading, setIsLoading] = useState<boolean>()
+  const [ticketUser, setTicketUser] = useState<string>()
   const toast = useToast()
 
   const BuyTicket = async () => {
@@ -61,6 +60,36 @@ export const FlightCard: React.FC<FlightCardProps> = ({
         duration: 5000,
         isClosable: true,
       })
+    } catch (err) {
+      toast({
+        title: "Error has occurred, please try again.",
+        position: "top",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  const getTicketUserId = async () => {
+    try {
+      //@ts-ignore
+      const uid = await supabase
+        .from("ticket")
+        .select("user_id")
+        .eq("flight_id", id)
+        .eq("seat_number", seat)
+      // toast({
+      //   title: "Ticket purchased!",
+      //   position: "top",
+      //   status: "success",
+      //   duration: 5000,
+      //   isClosable: true,
+      // })
+      console.log(uid.body?.[0])
+      setTicketUser(uid.body?.[0].user_id)
     } catch (err) {
       toast({
         title: "Error has occurred, please try again.",
@@ -107,6 +136,13 @@ export const FlightCard: React.FC<FlightCardProps> = ({
       setIsLoading(false)
     }
   }
+  useEffect(() => {
+    async function fetchData() {
+      await getTicketUserId()
+      console.log(ticketUser)
+    }
+    fetchData()
+  }, [])
   return (
     <Box
       py={8}
@@ -146,7 +182,11 @@ export const FlightCard: React.FC<FlightCardProps> = ({
             </Text>
           </HStack>
         </VStack>
-        <Button onClick={onOpen}>Buy</Button>
+        <Button w={"full"} onClick={ticketUser ? () => null : onOpen}>
+          {" "}
+          {ticketUser ? `Promote this ticket holder` : "Buy Ticket"}
+        </Button>
+
         <Button
           isLoading={isLoading}
           onClick={() => {
