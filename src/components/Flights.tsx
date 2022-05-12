@@ -11,9 +11,11 @@ import React, { useState, useEffect } from "react"
 import { FlightCard } from "./FlightCard"
 import { supabase } from "../supabaseClient"
 
-interface FlightProps {}
+interface FlightProps {
+  privilige: string
+}
 
-export const Flights: React.FC<FlightProps> = ({}) => {
+export const Flights: React.FC<FlightProps> = ({privilige}) => {
   const [search, setSearch] = useState<string>("")
   const [flights, setFlights] = useState<any>()
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
@@ -97,6 +99,7 @@ export const Flights: React.FC<FlightProps> = ({}) => {
                       to_location={e.to_location}
                       price={e.price}
                       seat={e.seat}
+                      privilige = {privilige}
                     />
                   </Box>
                 )

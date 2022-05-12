@@ -15,34 +15,49 @@ const PrivateRoute = ({ session, children }) => {
 }
 function App() {
   const [session, setSession] = useState<any>()
+  const [privilige, setPrivilige] = useState<any>()
+  const [isAuthenticated, setIsAuthenticated] = useState<any>()
 
   useEffect(() => {
     setSession(supabase.auth.session())
-
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })
+    const getPrivilege = async () =>{
+      const userId = supabase.auth.user()?.id
+      try {
+        let { error, data } = await supabase
+          .from("profile")
+          .select()
+          .eq("id", userId)
+        //@ts-ignore
+        setPrivilige(data[0].privilege)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getPrivilege()
   }, [])
 
   return (
     <ChakraProvider>
       <BrowserRouter>
-        {session && <Navbar />}
+        {(session && privilige) && <Navbar privilige ={privilige} />}
         <Routes>
-          <Route path="/" element={!session ? <Home /> : <Flights />} />
+          <Route path="/" element={!session ? <Home /> : <Flights privilige = {privilige}/>} />
           <Route
             path="admin-login"
-            element={!session ? <AuthForm form="admin-login" /> : <Flights />}
+            element={!session ? <AuthForm form="admin-login" /> : <Flights privilige = {privilige}/>}
           />
           <Route
             path="user-login"
-            element={!session ? <AuthForm form="user-login" /> : <Flights />}
+            element={!session ? <AuthForm form="user-login" /> : <Flights privilige = {privilige}/>}
           />
           <Route
             path="flights"
             element={
               <PrivateRoute session={session}>
-                <Flights />
+                <Flights privilige = {privilige} />
               </PrivateRoute>
             }
           />
@@ -50,7 +65,7 @@ function App() {
             path="my-tickets"
             element={
               <PrivateRoute session={session}>
-                <MyTickets />{" "}
+                <MyTickets  />
               </PrivateRoute>
             }
           />

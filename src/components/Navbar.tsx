@@ -21,7 +21,11 @@ import {
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../supabaseClient"
-export const Navbar: React.FC = () => {
+interface NavbarProps{
+  privilige:string
+}
+export const Navbar: React.FC <NavbarProps> = ({privilige}) => {
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [seat, setSeat] = useState<string>("")
   const [locationFrom, setLocationFrom] = useState<string>()
@@ -98,7 +102,7 @@ export const Navbar: React.FC = () => {
       <Text>{supabase.auth.user()?.email}</Text>
       <Button onClick={() => navigate("my-tickets")}>My tickets</Button>
       <Button onClick={() => navigate("")}>Buy tickets</Button>
-      <Button onClick={onOpen}>Add tickets</Button>
+      {(privilige == 'admin') && <Button onClick={onOpen}>Add tickets</Button>}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

@@ -4,7 +4,8 @@ import { supabase } from "../supabaseClient"
 import { FlightCard } from "./FlightCard"
 import { MyTicketsCard } from "./MyTicketsCard"
 
-interface MyTicketsProps {}
+interface MyTicketsProps {
+}
 export const MyTickets: React.FC<MyTicketsProps> = () => {
   const [tickets, setTickets] = useState<any>()
   const toast = useToast()

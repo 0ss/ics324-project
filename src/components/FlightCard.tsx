@@ -24,9 +24,7 @@ import React, { useEffect, useState } from "react"
 import { supabase } from "../supabaseClient"
 import { Flight } from "./constants"
 
-interface FlightCardProps extends Flight {}
-
-export const FlightCard: React.FC<FlightCardProps> = ({
+export const FlightCard: React.FC<any> = ({
   aircraft_id,
   arrival_time,
   depr_time,
@@ -35,6 +33,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   to_location,
   price,
   seat,
+  privilige
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [ccNumber, setCCNumber] = useState<string>()
@@ -183,11 +182,12 @@ export const FlightCard: React.FC<FlightCardProps> = ({
           </HStack>
         </VStack>
         <Button w={"full"} onClick={ticketUser ? () => null : onOpen}>
-          {" "}
-          {ticketUser ? `Promote this ticket holder` : "Buy Ticket"}
+         {privilige == 'admin'? ticketUser ? `Promote this ticket holder` :
+          "Buy Ticket" : ticketUser ? `Booked` : "Buy Ticket" }
         </Button>
 
-        <Button
+        {(privilige == 'admin') &&(
+          <Button
           isLoading={isLoading}
           onClick={() => {
             deleteTicket(id)
@@ -196,6 +196,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
           Delete Ticket
         </Button>
 
+        )}
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
