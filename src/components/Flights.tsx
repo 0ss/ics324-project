@@ -11,13 +11,10 @@ import React, { useState, useEffect } from "react"
 import { FlightCard } from "./FlightCard"
 import { supabase } from "../supabaseClient"
 
-interface FlightProps {
-  privilige: string
-}
-
-export const Flights: React.FC<FlightProps> = ({privilige}) => {
+export const Flights: React.FC = () => {
   const [search, setSearch] = useState<string>("")
   const [flights, setFlights] = useState<any>()
+  const [privilige, setPrivilige] = useState<any>()
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
@@ -36,6 +33,20 @@ export const Flights: React.FC<FlightProps> = ({privilige}) => {
 
   useEffect(() => {
     fetchFlights()
+    const getPrivilege = async () =>{
+      const userId = supabase.auth.user()?.id
+      try {
+        let { error, data } = await supabase
+          .from("profile")
+          .select()
+          .eq("id", userId)
+        //@ts-ignore
+        setPrivilige(data[0].privilege)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getPrivilege()
   }, [])
 
   return (

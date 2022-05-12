@@ -12,45 +12,54 @@ import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../supabaseClient"
 
-interface AuthFormProps {
-  form: "admin-login" | "admin-register" | "user-login" | "user-register"
+interface AuthForm{
+  type : 'Signup' | 'Login'
 }
-export const AuthForm: React.FC<AuthFormProps> = ({ form }) => {
-  const heading = form
-    .split("-")
-    .map((e) => e.toLocaleLowerCase())
-    .join(" ")
-  const navigate = useNavigate()
+export const AuthForm: React.FC<AuthForm> = ({type}) => {
 
+  const navigate = useNavigate()
   const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>('')
   const [loading, setIsLoading] = useState<boolean>()
   const toast = useToast()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     //supabase auth
     try {
       setIsLoading(true)
-      const { error } = await supabase.auth.signIn({ email })
+      const { error } = await supabase.auth.signUp({ email,password })
       if (error) throw error
-      toast({
-        title: "Sign In Successfull",
-        position: "top",
-        description: "Check your email for the magic link :)",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      })
-    } catch (err) {
-      toast({
-        title: "Error",
-        position: "top",
-        description: "Error has occurred, please try again.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      })
       setIsLoading(false)
+    }catch(err){
+      toast({
+        title: 'An error has occurred.',
+        description: "Please check credentials",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    //supabase auth
+    try {
+      setIsLoading(true)
+      const { error } = await supabase.auth.signIn({ email,password })
+      if (error) throw error
+      setIsLoading(false)
+    }catch(err){
+      toast({
+        title: 'An error has occurred.',
+        description: "Please check credentials",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
     } finally {
       setIsLoading(false)
     }
@@ -64,12 +73,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({ form }) => {
         p={"12"}
         boxShadow="base"
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={type == 'Signup' ? handleSignup : handleLogin}>
           <Center py={"10"}>
-            <Heading fontSize={"2xl"}>{heading}</Heading>
+            <Heading fontSize={"2xl"}>{type}</Heading>
           </Center>
           <FormControl isRequired>
-            <FormLabel htmlFor="email"> email</FormLabel>
+            <FormLabel htmlFor="email">Email</FormLabel>
             <Input
               borderColor={"black"}
               id="email"
@@ -78,6 +87,17 @@ export const AuthForm: React.FC<AuthFormProps> = ({ form }) => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
+          <FormControl isRequired>
+            <FormLabel htmlFor="email">Password</FormLabel>
+            <Input
+              borderColor={"black"}
+              id="password"
+              type={"password"}
+              placeholder="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormControl>
+
           <Center py="5">
             <Button type={"submit"} isLoading={loading}>
               Continue
@@ -85,15 +105,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({ form }) => {
           </Center>
         </form>
         <Center py="5">
-          <Button
-            onClick={() => {
-              navigate("/")
-            }}
-          >
-            Home
-          </Button>
-        </Center>
-      </Box>
+            <Button type={"submit"} onClick={()=>navigate(type == 'Login' ? '/signup': '/login')}>
+              {type == 'Login' ? 'Not Registered?' : 'Already have an account?'}
+            </Button>
+          </Center>
+              </Box>
     </Center>
   )
 }

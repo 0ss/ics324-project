@@ -18,13 +18,11 @@ import {
   toast,
   useToast,
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../supabaseClient"
-interface NavbarProps{
-  privilige:string
-}
-export const Navbar: React.FC <NavbarProps> = ({privilige}) => {
+
+export const Navbar: React.FC= () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [seat, setSeat] = useState<string>("")
@@ -33,6 +31,7 @@ export const Navbar: React.FC <NavbarProps> = ({privilige}) => {
   const [dep, setDep] = useState<string>()
   const [arrival, setArrival] = useState<string>()
   const [price, setPrice] = useState<string>()
+  const [privilige, setPrivilige] = useState<string>()
   const navigate = useNavigate()
   const toast = useToast()
   const checkIfEmpty = (obj: Record<string, string | undefined>) => {
@@ -96,13 +95,37 @@ export const Navbar: React.FC <NavbarProps> = ({privilige}) => {
     } finally {
     }
   }
+  console.log(privilige+"asdf")
+
+  const logOut = ()=>{
+    supabase.auth.signOut()
+  }
+  
+
+  useEffect(()=>{
+    const getPrivilege = async () =>{
+      const userId = supabase.auth.user()?.id
+      try {
+        let { error, data } = await supabase
+          .from("profile")
+          .select()
+          .eq("id", userId)
+        //@ts-ignore
+        setPrivilige(data[0].privilege)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getPrivilege()
+  })
 
   return (
     <HStack w="full" justifyContent="space-between" p={8}>
       <Text>{supabase.auth.user()?.email}</Text>
       <Button onClick={() => navigate("my-tickets")}>My tickets</Button>
       <Button onClick={() => navigate("")}>Buy tickets</Button>
-      {(privilige == 'admin') && <Button onClick={onOpen}>Add tickets</Button>}
+      {(privilige == 'admin') ? <Button onClick={onOpen}>Add tickets</Button>:
+      ""}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -174,7 +197,7 @@ export const Navbar: React.FC <NavbarProps> = ({privilige}) => {
         color="white"
         borderRadius="full"
         boxShadow="base"
-        onClick={() => supabase.auth.signOut()}
+        onClick={() => logOut()}
       >
         Logout
       </Button>

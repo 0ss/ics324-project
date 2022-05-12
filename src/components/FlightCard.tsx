@@ -22,7 +22,6 @@ import {
 } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { supabase } from "../supabaseClient"
-import { Flight } from "./constants"
 
 export const FlightCard: React.FC<any> = ({
   aircraft_id,

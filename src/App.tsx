@@ -10,54 +10,39 @@ import { Navbar } from "./components/Navbar"
 
 //@ts-ignore
 const PrivateRoute = ({ session, children }) => {
-  if (!session) return <Home />
+  if (!session) return <AuthForm type="Login" />
   return children
 }
 function App() {
   const [session, setSession] = useState<any>()
   const [privilige, setPrivilige] = useState<any>()
-  const [isAuthenticated, setIsAuthenticated] = useState<any>()
 
   useEffect(() => {
-    setSession(supabase.auth.session())
-    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(supabase.auth.session())
+      supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })
-    const getPrivilege = async () =>{
-      const userId = supabase.auth.user()?.id
-      try {
-        let { error, data } = await supabase
-          .from("profile")
-          .select()
-          .eq("id", userId)
-        //@ts-ignore
-        setPrivilige(data[0].privilege)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    getPrivilege()
   }, [])
 
   return (
     <ChakraProvider>
       <BrowserRouter>
-        {(session && privilige) && <Navbar privilige ={privilige} />}
+        {(session) && <Navbar/>}
         <Routes>
-          <Route path="/" element={!session ? <Home /> : <Flights privilige = {privilige}/>} />
+          <Route path="/" element={!session ? <AuthForm type="Login" /> : <Flights/>} />
           <Route
-            path="admin-login"
-            element={!session ? <AuthForm form="admin-login" /> : <Flights privilige = {privilige}/>}
+            path="login"
+            element={!session ? <AuthForm type="Login" /> : <Flights/>}
           />
           <Route
-            path="user-login"
-            element={!session ? <AuthForm form="user-login" /> : <Flights privilige = {privilige}/>}
+            path="signup"
+            element={!session ? <AuthForm type="Signup" /> : <Flights/>}
           />
           <Route
             path="flights"
             element={
               <PrivateRoute session={session}>
-                <Flights privilige = {privilige} />
+                <Flights/>
               </PrivateRoute>
             }
           />
