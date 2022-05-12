@@ -170,14 +170,14 @@ export const FlightCard: React.FC<FlightCardProps> = ({
           <HStack>
             <Text>📅 Departue:</Text>
             <Spacer />
-            <Text fontWeight={"bold"} fontSize={"sm"}>
+            <Text fontWeight={"bold"} fontSize={"xs"}>
               {new Date(depr_time).toLocaleString()}
             </Text>
           </HStack>
           <HStack>
             <Text>📅 Arrival:</Text>
             <Spacer />
-            <Text fontWeight={"bold"} fontSize={"sm"}>
+            <Text fontWeight={"bold"} fontSize={"xs"}>
               {new Date(arrival_time).toLocaleString()}
             </Text>
           </HStack>
