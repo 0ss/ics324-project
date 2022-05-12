@@ -35,7 +35,6 @@ export const Navbar: React.FC= () => {
   const navigate = useNavigate()
   const toast = useToast()
   const checkIfEmpty = (obj: Record<string, string | undefined>) => {
-    console.log(obj)
     for (const i in obj) {
       if (!obj[i]) {
         toast({
@@ -73,6 +72,7 @@ export const Navbar: React.FC= () => {
           flight_id: id,
           seat_number: seat,
           user_id: null,
+          waitlist: 'unapproved'
         })
         .single()
 
@@ -95,7 +95,6 @@ export const Navbar: React.FC= () => {
     } finally {
     }
   }
-  console.log(privilige+"asdf")
 
   const logOut = ()=>{
     supabase.auth.signOut()

@@ -9,7 +9,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { supabase } from "../supabaseClient"
 import { Flight } from "./constants"
 
@@ -30,7 +30,29 @@ export const MyTicketsCard: React.FC<MyTicketsCardProps> = ({
   const [ccDate, setCCDate] = useState<string>()
   const [ccSecret, setCCSecret] = useState<string>()
   const [isLoading, setIsLoading] = useState<boolean>()
+  const [status, setStatus] = useState<any>()
   const toast = useToast()
+
+
+  useEffect(() => {
+    const getStatus = async (id:number) =>{
+      try {
+        const ticketStatus = await supabase
+          .from("ticket")
+          .select("waitlist")
+          .eq("flight_id", id)
+        //@ts-ignore
+        setStatus(ticketStatus.body[0].waitlist)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    getStatus(id)
+
+    
+  }, [])
+
 
   const deleteTicket = async (id: number) => {
     try {
@@ -109,7 +131,7 @@ export const MyTicketsCard: React.FC<MyTicketsCardProps> = ({
         >
           Delete Ticket
         </Button>
-        <Badge>WaitList</Badge>
+        <Badge>WaitList Status: {status}</Badge>
       </VStack>
     </Box>
   )

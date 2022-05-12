@@ -40,6 +40,8 @@ export const FlightCard: React.FC<any> = ({
   const [ccSecret, setCCSecret] = useState<string>()
   const [isLoading, setIsLoading] = useState<boolean>()
   const [ticketUser, setTicketUser] = useState<string>()
+  const [status, setStatus] = useState<any>()
+  const [upForPromotion, setUpForPromotion] = useState<boolean>(false)
   const toast = useToast()
 
   const BuyTicket = async () => {
@@ -79,14 +81,6 @@ export const FlightCard: React.FC<any> = ({
         .select("user_id")
         .eq("flight_id", id)
         .eq("seat_number", seat)
-      // toast({
-      //   title: "Ticket purchased!",
-      //   position: "top",
-      //   status: "success",
-      //   duration: 5000,
-      //   isClosable: true,
-      // })
-      console.log("body: ", uid.body?.[0])
       setTicketUser(uid.body?.[0].user_id)
     } catch (err) {
       toast({
@@ -101,9 +95,50 @@ export const FlightCard: React.FC<any> = ({
       setIsLoading(false)
     }
   }
+
+  const getStatus = async (id:number) =>{
+    try {
+      const ticketStatus = await supabase
+        .from("ticket")
+        .select("waitlist")
+        .eq("flight_id", id)
+      //@ts-ignore
+      setStatus(ticketStatus.body[0].waitlist)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const promoteUser = async () =>{
+    try {
+      setIsLoading(true)
+      await supabase
+        .from("ticket")
+        .update({ waitlist: 'approved' })
+        .eq("flight_id", id)
+        toast({
+          title: "User Promoted!.",
+          position: "top",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        })
+    } catch (err) {
+      toast({
+        title: "Error has occurred, please try again.",
+        position: "top",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  
   const deleteTicket = async (id: number) => {
     try {
-      console.log(id, seat)
       setIsLoading(true)
       const { error } = await supabase
         .from("ticket")
@@ -137,10 +172,16 @@ export const FlightCard: React.FC<any> = ({
   useEffect(() => {
     async function fetchData() {
       await getTicketUserId()
-      console.log("ticket user: ", ticketUser)
+    }
+    async function fetchStatus(){
+      await getStatus(id)
     }
     fetchData()
+    fetchStatus()    
+    
   }, [])
+
+ 
   return (
     <Box
       py={8}
@@ -180,14 +221,13 @@ export const FlightCard: React.FC<any> = ({
             </Text>
           </HStack>
         </VStack>
-        <Button w={"full"} onClick={ticketUser ? () => null : onOpen}>
-         {privilige == 'admin'? ticketUser ? `Promote this ticket holder` :
-          "Buy Ticket" : ticketUser ? `Booked` : "Buy Ticket" }
+        <Button w={"full"} onClick={(privilige == 'admin' && ticketUser && status == 'unapproved')? () => promoteUser() : !ticketUser? onOpen:undefined}>
+         {(privilige == 'admin' && ticketUser && status == 'unapproved')? `Promote this ticket holder` :
+           ticketUser ? `Booked` : "Buy Ticket" }
         </Button>
 
         {(privilige == 'admin') &&(
           <Button
-          isLoading={isLoading}
           onClick={() => {
             deleteTicket(id)
           }}

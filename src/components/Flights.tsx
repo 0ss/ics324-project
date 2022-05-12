@@ -24,7 +24,6 @@ export const Flights: React.FC = () => {
         .from("flights")
         .select()
         .order("id")
-      console.log(data)
       setFlights(data)
     } catch (err) {
       console.log(err)
