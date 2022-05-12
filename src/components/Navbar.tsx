@@ -69,6 +69,7 @@ export const Navbar: React.FC = () => {
         .insert({
           flight_id: id,
           seat_number: seat,
+          user_id: null,
         })
         .single()
 

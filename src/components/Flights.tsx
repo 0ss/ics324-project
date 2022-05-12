@@ -45,12 +45,12 @@ export const Flights: React.FC<FlightProps> = ({}) => {
         <Box w={"40%"} mx={"auto"} alignItems="center">
           <form onSubmit={handleSearch}>
             <FormControl isRequired>
-              <FormLabel htmlFor="email"> email</FormLabel>
+              <FormLabel htmlFor="search">Flight </FormLabel>
               <Input
                 borderColor={"black"}
                 id="seatch"
                 type={"text"}
-                placeholder="Search"
+                placeholder="Khobar to Dubai"
                 onChange={(e) => setSearch(e.target.value)}
               />
             </FormControl>

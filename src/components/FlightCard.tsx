@@ -88,7 +88,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
       //   duration: 5000,
       //   isClosable: true,
       // })
-      console.log(uid.body?.[0])
+      console.log("body: ", uid.body?.[0])
       setTicketUser(uid.body?.[0].user_id)
     } catch (err) {
       toast({
@@ -139,7 +139,7 @@ export const FlightCard: React.FC<FlightCardProps> = ({
   useEffect(() => {
     async function fetchData() {
       await getTicketUserId()
-      console.log(ticketUser)
+      console.log("ticket user: ", ticketUser)
     }
     fetchData()
   }, [])
