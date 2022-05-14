@@ -22,8 +22,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../supabaseClient"
 
-export const Navbar: React.FC= () => {
-
+export const Navbar: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [seat, setSeat] = useState<string>("")
   const [locationFrom, setLocationFrom] = useState<string>()
@@ -72,7 +71,7 @@ export const Navbar: React.FC= () => {
           flight_id: id,
           seat_number: seat,
           user_id: null,
-          waitlist: 'unapproved'
+          waitlist: "unapproved",
         })
         .single()
 
@@ -96,13 +95,12 @@ export const Navbar: React.FC= () => {
     }
   }
 
-  const logOut = ()=>{
+  const logOut = () => {
     supabase.auth.signOut()
   }
-  
 
-  useEffect(()=>{
-    const getPrivilege = async () =>{
+  useEffect(() => {
+    const getPrivilege = async () => {
       const userId = supabase.auth.user()?.id
       try {
         let { error, data } = await supabase
@@ -123,8 +121,15 @@ export const Navbar: React.FC= () => {
       <Text>{supabase.auth.user()?.email}</Text>
       <Button onClick={() => navigate("my-tickets")}>My tickets</Button>
       <Button onClick={() => navigate("")}>Buy tickets</Button>
-      {(privilige == 'admin') ? <Button onClick={onOpen}>Add tickets</Button>:
-      ""}
+      {privilige == "admin" ? (
+        <>
+          <Button onClick={onOpen}>Add tickets</Button>
+          <Button onClick={() => navigate("reports")}>Reports </Button>
+        </>
+      ) : (
+        ""
+      )}
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
