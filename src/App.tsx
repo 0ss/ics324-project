@@ -16,7 +16,6 @@ const PrivateRoute = ({ session, children }) => {
 }
 function App() {
   const [session, setSession] = useState<any>()
-  const [privilige, setPrivilige] = useState<any>()
 
   useEffect(() => {
     setSession(supabase.auth.session())

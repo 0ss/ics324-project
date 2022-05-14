@@ -63,6 +63,19 @@ export const MyTicketsCard: React.FC<MyTicketsCardProps> = ({
         .update({ user_id: null, waitlist: 'unapproved' })
         .eq("flight_id", id)
         .eq("seat_number", seat)
+
+        const {data:cancelledFlights} = await supabase
+        .from('flights')
+        .select("cancelledTickets")
+        .eq("id", id)
+        
+        //@ts-ignore
+        let cancelledTicketsUpdate = cancelledFlights[0].cancelledTickets + 1
+        await supabase
+        .from('flights')
+        .update({cancelledTickets: cancelledTicketsUpdate})
+        .eq("id", id)
+        
       if (error) throw error
       toast({
         title: "Ticket deleted!",

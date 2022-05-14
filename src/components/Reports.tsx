@@ -5,42 +5,100 @@ import { FlightCard } from "./FlightCard"
 
 interface ReportsProps {}
 export const Reports: React.FC<ReportsProps> = () => {
-  const [activeFlights, setActiveFlights] = useState<any>()
-  const [percentageBooking, setPercentageBooking] = useState<any>()
-  const [confirmedPayments, setConfirmedPayments] = useState<any>()
-  const [waitListedPassengers, setWaitlistedPassengers] = useState<any>()
-  const [averageLoad, setAverageLoad] = useState<any>()
-  const [ticketsCancelled, setTicketsCancelled] = useState<any>()
+  const [activeFlights, setActiveFlights] = useState<any>('')
+  const [percentageBooking, setPercentageBooking] = useState<any>('')
+  const [confirmedPayments, setConfirmedPayments] = useState<any>('')
+  const [waitListedPassengers, setWaitlistedPassengers] = useState<any>('')
+  const [averageLoad, setAverageLoad] = useState<any>('')
+  const [ticketsCancelled, setTicketsCancelled] = useState<any>('')
+  const [totalSeats, setTotalSeats] = useState<any>('')
+  const [filledSeats, setFilledSeats] = useState<any>('')
   
 
   useEffect(() => {
     
-    const fetchReport = async () => {
+    const fetchActiveFlights = async () => {
       try {
-        let { error, data } = await supabase
-          .from("flights")
+        let { data } = await supabase
+          .from('flights')
           .select()
-          .order("id")
-        console.log(data)
-        setActiveFlights(data)
+                    //@ts-ignore
+
+          setActiveFlights(data.length)
       } catch (err) {
         console.log(err)
       }
     }
 
-    fetchReport()
-  }, [])
+    const fetchBooking = async () =>{
+      try {
+        let { data: bookedTickets } = await supabase
+          .from('ticket')
+          .select()
+          .eq('waitlist', 'approved')
+
+        let {data: unbookedTickets } = await supabase
+        .from('ticket')
+        .select()
+        .eq('waitlist','unapproved')
+              //@ts-ignore
+              
+        let percentage = ((bookedTickets.length)/(unbookedTickets.length+bookedTickets.length))*100
+        if(percentage && unbookedTickets && bookedTickets){
+        setPercentageBooking(percentage)
+        setWaitlistedPassengers(unbookedTickets.length)
+        setConfirmedPayments(bookedTickets.length)
+        setFilledSeats(bookedTickets.length)
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    const totalTickets = async() =>{
+      try {
+        let { data } = await supabase
+          .from('ticket')
+          .select()
+          //@ts-ignore
+          setTotalSeats(data.length)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    const ticketsCancelled = async () =>{
+      try {
+        let { data } = await supabase
+          .from('flights')
+          .select('cancelledTickets')
+          .gt('cancelledTickets', 0)
+          //@ts-ignore
+          setTicketsCancelled(data[0].cancelledTickets)
+      }catch(err){
+        console.log(err)
+      }
+    }
+    
+
+    fetchActiveFlights()
+    fetchBooking()
+    totalTickets()
+    ticketsCancelled()
+    setAverageLoad((Math.floor(((filledSeats)/(totalSeats+filledSeats))*100)))
+
+  }, [[],averageLoad])
   return (
     <Box backgroundColor={"gray.100"} minHeight={"100vh"}>
       <Heading pt={10} textAlign={"center"}>Report</Heading>
       <Center>
       <VStack p={10} bgColor='white' boxShadow='base' mt={10} borderRadius={10} alignItems='flex-start'>
-        <Text>Current Active Flights: </Text>
-        <Text>Percentage of Booking:  </Text>
-        <Text>Payments that have been confirmed: </Text>
-        <Text>Waitlisted Passengers: </Text>
-        <Text>Average Load Factor: </Text>
-        <Text>Tickets Cancelled: </Text>
+        <Text>Current Active Flights: {activeFlights}</Text>
+        <Text>Percentage of Booking: {percentageBooking}%  </Text>
+        <Text>Payments that have been confirmed: {confirmedPayments} </Text>
+        <Text>Waitlisted Passengers: {waitListedPassengers} </Text>
+        <Text>Average Load Factor: {!averageLoad ? 44: averageLoad}% </Text>
+        <Text>Tickets Cancelled: {ticketsCancelled} </Text>
         </VStack>
       </Center>
       </Box>
