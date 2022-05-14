@@ -60,7 +60,7 @@ export const MyTicketsCard: React.FC<MyTicketsCardProps> = ({
       setIsLoading(true)
       const { error } = await supabase
         .from("ticket")
-        .update({ user_id: null })
+        .update({ user_id: null, waitlist: 'unapproved' })
         .eq("flight_id", id)
         .eq("seat_number", seat)
       if (error) throw error
