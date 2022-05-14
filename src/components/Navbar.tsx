@@ -97,6 +97,7 @@ export const Navbar: React.FC = () => {
 
   const logOut = () => {
     supabase.auth.signOut()
+    navigate('/')
   }
 
   useEffect(() => {
