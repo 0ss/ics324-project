@@ -1,4 +1,4 @@
-import { Box, Heading, SimpleGrid } from "@chakra-ui/react"
+import { Box, Heading, Center,Text, VStack } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { supabase } from "../supabaseClient"
 import { FlightCard } from "./FlightCard"
@@ -6,47 +6,43 @@ import { FlightCard } from "./FlightCard"
 interface ReportsProps {}
 export const Reports: React.FC<ReportsProps> = () => {
   const [activeFlights, setActiveFlights] = useState<any>()
-  const fetchActiveFlights = async () => {
-    try {
-      let { error, data } = await supabase
-        .from("flights")
-        .select()
-        .order("id")
-      console.log(data)
-      setActiveFlights(data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  const [percentageBooking, setPercentageBooking] = useState<any>()
+  const [confirmedPayments, setConfirmedPayments] = useState<any>()
+  const [waitListedPassengers, setWaitlistedPassengers] = useState<any>()
+  const [averageLoad, setAverageLoad] = useState<any>()
+  const [ticketsCancelled, setTicketsCancelled] = useState<any>()
+  
 
   useEffect(() => {
-    fetchActiveFlights()
+    
+    const fetchReport = async () => {
+      try {
+        let { error, data } = await supabase
+          .from("flights")
+          .select()
+          .order("id")
+        console.log(data)
+        setActiveFlights(data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    fetchReport()
   }, [])
   return (
     <Box backgroundColor={"gray.100"} minHeight={"100vh"}>
-      <Heading textAlign={"center"}>Currect Active Flights:</Heading>
-      {activeFlights && (
-        <SimpleGrid columns={{ sm: 1, lg: 3 }}>
-          {activeFlights.map((e: any) => {
-            {
-              return (
-                <Box m={"10"} key={e.id}>
-                  <FlightCard
-                    aircraft_id={e.aircraft_id}
-                    arrival_time={e.arrival}
-                    depr_time={e.departure}
-                    from_location={e.from_location}
-                    id={e.id}
-                    to_location={e.to_location}
-                    price={e.price}
-                    seat={e.seat}
-                  />
-                </Box>
-              )
-            }
-          })}
-        </SimpleGrid>
-      )}
-    </Box>
+      <Heading pt={10} textAlign={"center"}>Report</Heading>
+      <Center>
+      <VStack p={10} bgColor='white' boxShadow='base' mt={10} borderRadius={10} alignItems='flex-start'>
+        <Text>Current Active Flights: </Text>
+        <Text>Percentage of Booking:  </Text>
+        <Text>Payments that have been confirmed: </Text>
+        <Text>Waitlisted Passengers: </Text>
+        <Text>Average Load Factor: </Text>
+        <Text>Tickets Cancelled: </Text>
+        </VStack>
+      </Center>
+      </Box>
   )
 }
